@@ -2,7 +2,7 @@ name: Build Patched WhateverXe
 on: [push, workflow_dispatch]
 jobs:
   build:
-    runs-on: macos-15
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
         with:
