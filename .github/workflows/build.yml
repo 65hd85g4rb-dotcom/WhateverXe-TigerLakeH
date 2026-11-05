@@ -1,0 +1,24 @@
+name: Build Patched WhateverXe
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gputicks-bootarg
+      - name: Download MacKernelSDK and Lilu
+        run: |
+          git clone https://github.com/acidanthera/MacKernelSDK.git
+          curl -L -o Lilu.zip https://github.com/acidanthera/Lilu/releases/download/1.7.2/Lilu-1.7.2-DEBUG.zip
+          unzip -q Lilu.zip -d lilu_extracted
+          cp -R lilu_extracted/Lilu.kext .
+      - name: Compile WhateverXe Release
+        run: python3 tools/build.py --release
+      - name: Upload Compiled Kext
+        uses: actions/upload-artifact@v4
+        with:
+          name: WhateverXe-9A60-Patched
+          path: |
+            build/**/*.kext
+            dist/**/*.zip
